@@ -2,6 +2,8 @@ FROM python:3.10-alpine
 
 # add a user so we're not running as root
 # RUN useradd sprintf
+RUN apk add --no-cache curl
+
 RUN addgroup -S appgroup && adduser -S sprintf -G appgroup
 
 RUN mkdir -p /home/sprintf/
@@ -21,8 +23,8 @@ RUN chown sprintf /build -R
 WORKDIR /build/
 USER sprintf
 
-RUN python -m pip install --upgrade pip
-RUN python -m pip install /build
+RUN python -m pip install --upgrade --no-warn-script-location pip
+RUN python -m pip install --no-warn-script-location /build
 
 # to allow xff headers from docker IPs
 ENV FORWARDED_ALLOW_IPS="*"
