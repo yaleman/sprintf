@@ -19,7 +19,7 @@ services:
       test: ["CMD", "curl",
         "-f",
         "-s",
-        "http://127.0.0.1:8090/",
+        "http://127.0.0.1:8090/up",
         ]
       interval: 60s
       timeout: 1s

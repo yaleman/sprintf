@@ -11,9 +11,12 @@ from fastapi.responses import FileResponse, HTMLResponse
 from pydantic import BaseModel
 
 
+DEFAULT_FORMATSTRING = "%Y-%m-%d"
+
 class UserQuery(BaseModel):
     """ query from a user """
     # datestring: Optional[str] = None
+    action: str = "parse"
     formatstring: str
 
 class ErrorResult(BaseModel):
@@ -50,6 +53,11 @@ async def favicon() -> FileResponse:
     """ return the favicon file """
     return FileResponse(f"{os.path.dirname(__file__)}/favicon.png")
 
+@app.get("/up")
+async def healthcheck() -> HTMLResponse:
+    """ healthcheck endpoint """
+    return HTMLResponse("OK")
+
 @app.get("/")
 async def root(f: Optional[str] = None) -> HTMLResponse: # pylint: disable=invalid-name
     """ homepage """
@@ -60,8 +68,7 @@ async def root(f: Optional[str] = None) -> HTMLResponse: # pylint: disable=inval
     content = indexfile.read_text(encoding="utf8")
 
     inputval = "%Y-%m-%d"
-    if f is not None:
-        if f.strip() != "":
-            inputval = f
+    if f is not None and f.strip() != "":
+        inputval = f.strip()
     content = content.replace("###QUERYSTRING###",inputval)
     return HTMLResponse(content)

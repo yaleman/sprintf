@@ -1,7 +1,9 @@
-FROM python:3.10
+FROM python:3.10-alpine
 
 # add a user so we're not running as root
-RUN useradd sprintf
+# RUN useradd sprintf
+RUN addgroup -S appgroup && adduser -S sprintf -G appgroup
+
 RUN mkdir -p /home/sprintf/
 RUN chown sprintf /home/sprintf -R
 
@@ -13,15 +15,16 @@ COPY sprintf sprintf
 COPY poetry.lock .
 COPY pyproject.toml .
 
-RUN python -m pip install poetry
+# RUN python -m pip install poetry
 
 RUN chown sprintf /build -R
 WORKDIR /build/
 USER sprintf
 
-RUN poetry install
+RUN python -m pip install --upgrade pip
+RUN python -m pip install /build
 
 # to allow xff headers from docker IPs
 ENV FORWARDED_ALLOW_IPS="*"
 
-CMD poetry run uvicorn sprintf:app --host 0.0.0.0 --port 8090 --proxy-headers
+CMD /home/sprintf/.local/bin/uvicorn sprintf:app --host 0.0.0.0 --port 8090 --proxy-headers
