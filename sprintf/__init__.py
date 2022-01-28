@@ -45,6 +45,11 @@ async def chibijs():
     """ return the chibi file """
     return FileResponse(f"{os.path.dirname(__file__)}/chibi-min.js")
 
+@app.get("/favicon.png")
+async def favicon():
+    """ return the favicon file """
+    return FileResponse(f"{os.path.dirname(__file__)}/favicon.png")
+
 @app.get("/")
 async def root(f: Optional[str] = None): # pylint: disable=invalid-name
     """ homepage """
