@@ -21,8 +21,7 @@ USER sprintf
 
 RUN poetry install
 
-# Now we just want to our WORKDIR to be /build/app for simplicity
-# We could skip this part and then type
-# python -m uvicorn main.app:app ... below
+# to allow xff headers from docker IPs
+ENV FORWARDED_ALLOW_IPS="*"
 
-CMD poetry run uvicorn sprintf:app --host 0.0.0.0 --port 8090
+CMD poetry run uvicorn sprintf:app --host 0.0.0.0 --port 8090 --proxy-headers
