@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -49,8 +49,12 @@
     })
 
     </script>
-    <style type="text/css">
-        a { color: purple };
+    <style>
+
+    [data-theme="light"],
+    :root:not([data-theme="dark"]) {
+        --primary: #8e24aa;
+    }
     </style>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
