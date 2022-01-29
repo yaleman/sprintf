@@ -29,4 +29,4 @@ RUN python -m pip install --no-warn-script-location /build
 # to allow xff headers from docker IPs
 ENV FORWARDED_ALLOW_IPS="*"
 
-CMD /home/sprintf/.local/bin/uvicorn sprintf:app --host 0.0.0.0 --port 8090 --proxy-headers
+CMD python -m sprintf --host 0.0.0.0 --port 8090 --proxy-headers
