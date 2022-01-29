@@ -19,7 +19,7 @@ services:
       test: ["CMD", "curl",
         "-f",
         "-s",
-        "http://127.0.0.1:8090/up",
+        "http://127.0.0.1:8000/up",
         ]
       interval: 60s
       timeout: 1s
@@ -28,5 +28,5 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: true
     ports:
-      - "127.0.0.1:8090:8090"
+      - "127.0.0.1:8090:8000"
     restart: always

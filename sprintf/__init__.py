@@ -7,7 +7,10 @@ from pathlib import Path
 from typing import Dict, Optional, Union
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
+
+
 from pydantic import BaseModel
 
 DEFAULT_FORMATSTRING = "%Y-%m-%d"
@@ -15,29 +18,32 @@ IMAGES_BASEDIR = f"{os.path.dirname(__file__)}/images/"
 JS_BASEDIR = f"{os.path.dirname(__file__)}/js/"
 
 class UserQuery(BaseModel):
-    """ query from a user """
-    # datestring: Optional[str] = None
-    action: str = "parse"
+    """ Query from a user """
     formatstring: str
+
+class Result(BaseModel):
+    """ Result """
+    result: str
 
 class ErrorResult(BaseModel):
     """ error message """
     error: str
 
-
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+)
+
 @app.post("/parse")
-async def parse(query: UserQuery) -> Dict[str, str]:
+async def parse(query: UserQuery) -> Result:
     """ parse a request then responds """
-    try:
-        date_object = datetime.now(tz=timezone.utc)
-        return {
-            "result" : date_object.strftime(query.formatstring)
-        }
-    # pylint: disable=broad-except
-    except Exception as error:
-        return ErrorResult(error=f"Failed to parse: error {error}").dict()
+    date_object = datetime.now(tz=timezone.utc)
+    return Result( result=date_object.strftime(query.formatstring) )
 
 @app.get("/js/{filename}")
 async def jsfile(filename: str) -> Union[FileResponse, HTMLResponse]:
@@ -55,29 +61,6 @@ async def jsfile(filename: str) -> Union[FileResponse, HTMLResponse]:
         }))
         return HTMLResponse(status_code=403)
     return FileResponse(filepath.as_posix())
-
-
-@app.head("/images/{filename}")
-async def images_head(filename: str) -> Union[FileResponse, HTMLResponse]:
-    """ return the filename file """
-    filepath = Path(f"{os.path.dirname(__file__)}/images/{filename}").resolve()
-
-    if not filepath.exists() or not filepath.is_file():
-        return HTMLResponse(status_code=404)
-    if not IMAGES_BASEDIR in filepath.as_posix():
-        print(json.dumps({
-            "action" : "attempt_outside_images_dir",
-            "original_path" : filename,
-            "resolved_path" : filepath.as_posix()
-        }))
-        return HTMLResponse(status_code=403)
-
-    return HTMLResponse(
-        status_code=200,
-        headers={
-            "Content-Length" : str(filepath.stat().st_size),
-            }
-        )
 
 @app.get("/images/{filename}")
 async def images_get(filename: str) -> Union[FileResponse, HTMLResponse]:
