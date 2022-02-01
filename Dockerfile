@@ -1,10 +1,15 @@
-FROM python:3.10-alpine
+FROM python:3.10-slim
+# FROM python:3.10-alpine
 
+########################################
 # add a user so we're not running as root
-# RUN useradd sprintf
-RUN apk add --no-cache curl
+########################################
+# ubuntu mode
+RUN useradd sprintf
 
-RUN addgroup -S appgroup && adduser -S sprintf -G appgroup
+# alpine mode
+# RUN apk add --no-cache curl
+# RUN addgroup -S appgroup && adduser -S sprintf -G appgroup
 
 RUN mkdir -p /home/sprintf/
 RUN chown sprintf /home/sprintf -R
