@@ -10,7 +10,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 
-
 from pydantic import BaseModel
 
 DEFAULT_FORMATSTRING = "%Y-%m-%d"
@@ -20,6 +19,7 @@ JS_BASEDIR = f"{os.path.dirname(__file__)}/js/"
 class UserQuery(BaseModel):
     """ Query from a user """
     formatstring: str
+    epochtime: Optional[float] # Seconds since UNIX epoch
 
 class Result(BaseModel):
     """ Result """
@@ -42,8 +42,15 @@ app.add_middleware(
 @app.post("/parse")
 async def parse(query: UserQuery) -> Result:
     """ parse a request then responds """
-    date_object = datetime.now(tz=timezone.utc)
-    return Result( result=date_object.strftime(query.formatstring) )
+    print(query.json())
+    if query.epochtime is not None:
+        # print("using epochtime")
+        date_object = datetime.fromtimestamp(query.epochtime, tz=timezone.utc)
+    else:
+        date_object = datetime.now(tz=timezone.utc)
+    result=date_object.strftime(query.formatstring)
+    print(f"result: '{result}'")
+    return Result( result=result )
 
 @app.get("/js/{filename}")
 async def jsfile(filename: str) -> Union[FileResponse, HTMLResponse]:
