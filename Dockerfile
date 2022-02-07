@@ -11,6 +11,13 @@ RUN useradd sprintf
 # RUN apk add --no-cache curl
 # RUN addgroup -S appgroup && adduser -S sprintf -G appgroup
 
+
+
+RUN apt-get update
+RUN apt-get install curl
+RUN apt-get clean
+
+
 RUN mkdir -p /home/sprintf/
 RUN chown sprintf /home/sprintf -R
 
