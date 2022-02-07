@@ -22,6 +22,9 @@ pytest = "^6.2.5"
 black = "^21.12b0"
 pylint-pydantic = "^0.1.4"
 requests = "^2.27.1"
+requests-html = "^0.10.0"
+pytest-asyncio = "^0.18.0"
+types-requests = "^2.27.8"
 
 [build-system]
 requires = [
