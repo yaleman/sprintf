@@ -14,7 +14,7 @@ RUN useradd sprintf
 
 
 RUN apt-get update
-RUN apt-get install curl
+RUN apt-get install -y curl
 RUN apt-get clean
 
 
