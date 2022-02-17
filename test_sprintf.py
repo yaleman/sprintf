@@ -64,21 +64,19 @@ def test_input_epochtime():
     assert response.json() == {"result": "1970-01-01 00:01:10"}
 
 
-# TODO: finish this for #2
-# # def test_parse_n():
-#     """ tests the %N functionality """
+def test_parse_n():
+    """ tests the %N functionality """
 
+    epochtime = 0.0001
 
-#     epochtime = 0.0001
+    # regex_match = re.compile("")
+    expected_result = "1970-01-01 00:00:00.0001"
+    response = client.post(url="/parse", json = {
+        "formatstring" : "%Y-%m-%d %H:%M:%S.%4N" ,
+        "epochtime" : epochtime
+    })
 
-#     # regex_match = re.compile("")
-#     expected_result = "1970-01-01 10:00:00.0001"
-#     response = client.post(url="/parse", json = {
-#         "formatstring" : "%Y-%m-%d %H:%m:%S.%N" ,
-#         "epochtime" : epochtime
-#     })
-
-#     assert response.json() == { "result" : expected_result }
+    assert response.json() == { "result" : expected_result }
 
 
 def test_parse_q_live():
