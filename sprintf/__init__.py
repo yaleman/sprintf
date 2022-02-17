@@ -42,7 +42,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-match_q = re.compile(r"(?P<matchq>%(?P<num>\d*)Q)")
+match_q = re.compile(r"(?P<matchq>%(?P<num>\d?)Q)")
 
 class PassableUserQuery(BaseModel):
     """ pass this around """

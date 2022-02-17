@@ -38,27 +38,27 @@ def test_q4():
     assert parse_formatstring(input_data) == expected_string
 
 
-def test_q4_double():
-    """ test a  %4Q """
+def test_q6_double():
+    """ test a  %6Q """
     input_data = UserQuery.parse_obj(
         {
-            "formatstring": "%Y-%m-%d-%4Q-%4Q",
+            "formatstring": "%Y-%m-%d-%6Q-%6Q",
             "epochtime": "0.0001",
         }
     )
-    expected_string = "1970-01-01-0001-0001"
+    expected_string = "1970-01-01-000100-000100"
     assert parse_formatstring(input_data) == expected_string
 
 
-def test_q2():
-    """ test a  %2Q """
+def test_q3():
+    """ test a  %3Q """
     input_data = UserQuery.parse_obj(
         {
-            "formatstring": "%Y-%m-%d-%2Q",
+            "formatstring": "%Y-%m-%d-%3Q",
             "epochtime": "0.00001",
         }
     )
-    expected_string = "1970-01-01-00"
+    expected_string = "1970-01-01-000"
     assert parse_formatstring(input_data) == expected_string
 
 
