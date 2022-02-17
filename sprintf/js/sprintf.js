@@ -1,41 +1,33 @@
-
-async function sendquery() {
-    // grab the form value
-    let formatstring = $('input#formatstring').first().val();
-    $('#results').html("Loading...");
-
-    // make the call
-    let response = await fetch("/parse", {
-        method: "POST",
-        headers: {
-            "Content-type": "application/json"
+var sprintf = new Vue({
+    el: '#sprintf',
+    data: {
+        formatstring: '%Y-%m-%dT%H:%M:%S', // set the default value
+        outputval: ''
+    },
+    created () {
+        this.getParsed();
+    },
+    watch: {
+        formatstring() {
+            // watch the formatstring input and update the parsed result
+            this.getParsed();
         },
-        body: JSON.stringify({ "formatstring": formatstring}),
-        });
-    // wait for the call
-    let result = await response.json();
-    $('#results').val(result.result);
+    },
+    methods: {
+        copy_formatstring: function() {
+            navigator.clipboard.writeText.clipboard.writeText(this.formatstring);
+        },
+        copy_output: function() {
+            navigator.clipboard.writeText.clipboard.writeText(this.output);
+        },
+        getParsed: function() {
+            axios.post(
+                "/parse",
+                { formatstring: this.formatstring }
+            ).then(res => {
+                this.outputval = res.data.result;
+            });
+        }
+    },
+  })
 
-    // update the url to match the current input
-    let currentURL = new URL(window.location.href);
-    currentURL.searchParams.delete('f');
-    currentURL.searchParams.append('f',formatstring);
-    history.pushState({
-        id: 'sprintf',
-        source: 'web'
-    }, 'sprintf', currentURL.toString());
-}
-
-function copyFormatString() {
-    let formatstring = $('input#formatstring').first().val();
-    navigator.clipboard.writeText(formatstring);
-    console.log("Copied "+formatstring+" to the clipboard");
-
-}
-
-// runs on page load
-$().loaded(function(){
-    $('#formatstring').on('keyup',sendquery);
-    $('#copy').on('click', copyFormatString);
-    sendquery();
-})

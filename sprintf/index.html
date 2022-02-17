@@ -23,8 +23,6 @@
     <meta name="apple-mobile-web-app-title" content="sprintf" />
     <meta name="theme-color" content="white" />
 
-    <script src="/js/chibi-min.js"></script>
-    <script src="/js/sprintf.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
     <style>
 
@@ -49,7 +47,7 @@
   <title>sprintf</title>
 </head>
 <body>
-    <main class="container">
+    <main class="container" id="sprintf">
     <nav>
         <ul>
           <li><img src='/images/favicon.png' alt="sprintf logo" class="logo" /> &nbsp; <strong>sprintf</strong></li>
@@ -61,15 +59,28 @@
         <div class="grid">
             <label for="formatstring">
                 Format string
-            <input type="text" class="inputblah" id="formatstring" name="formatstring" value="###QUERYSTRING###" />
+            <input type="text" class="inputblah" id="formatstring" name="formatstring" v-model="formatstring" />
         </label>
         <label for="results">Output
-            <input id="results" type="text" readonly/>
+            <input id="output" name="output" type="text" :value="outputval" readonly/>
         </label>
         </div>
         <div class="grid">
-        <a href="#" id="copy" name="copy" role="button" class="outline purple">Copy Format String</a>
+            <div>
+              This uses the usual <a href="https://docs.python.org/3/library/datetime.html#strftime-strptime-behavior">strftime format codes</a>. Type in the "format string" box, see what comes out on the other side. If something doesn't work please <a href="https://github.com/yaleman/sprintf/issues/new">log an issue</a>.
+            </div>
+
+        </div>
+        <div class="grid">
+            <div>
+             Yes, I named it wrong. I'll rename it one day.
+            </div>
+
         </div>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/js/sprintf.js"></script>
+
   </body>
   </html>
