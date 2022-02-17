@@ -82,17 +82,19 @@ def parse_formatstring(query: UserQuery) -> str:
     )
 
     passableobject = parse_q_formatstring(passableobject)
-    print(passableobject)
     return passableobject.date_object.strftime(passableobject.formatstring)
 
 @app.post("/parse")
 async def parse(query: UserQuery) -> Result:
     """ parse a request then responds """
-    print(query.json())
-
     result = parse_formatstring(query)
 
-    print(f"result: '{result}'")
+    print(json.dumps({
+        "formatstring" : query.formatstring,
+        "epochtime" : query.epochtime,
+        "result": result,
+    }))
+
     return Result( result=result )
 
 @app.get("/js/{filename}")

@@ -1,3 +1,5 @@
+// update URL functionality based on this: https://www.raymondcamden.com/2021/05/08/updating-and-supporting-url-parameters-with-vuejs
+
 var sprintf = new Vue({
     el: '#sprintf',
     data: {
@@ -5,20 +7,28 @@ var sprintf = new Vue({
         outputval: ''
     },
     created () {
+        let qp = new URLSearchParams(window.location.search);
+        if (qp.get("f") != "" ) {
+            this.formatstring = qp.get("f");
+        }
         this.getParsed();
     },
     watch: {
+        // watch the formatstring input and update the parsed result
         formatstring() {
-            // watch the formatstring input and update the parsed result
             this.getParsed();
+            this.updateUrl();
         },
     },
     methods: {
-        copy_formatstring: function() {
-            navigator.clipboard.writeText.clipboard.writeText(this.formatstring);
-        },
-        copy_output: function() {
-            navigator.clipboard.writeText.clipboard.writeText(this.output);
+        updateUrl() {
+            let qp = new URLSearchParams();
+            if(this.formatstring !== '') {
+                qp.set('f', this.formatstring);
+            } else {
+                qp.set("f", "");
+            }
+            history.replaceState(null, null, "?"+qp.toString());
         },
         getParsed: function() {
             axios.post(
