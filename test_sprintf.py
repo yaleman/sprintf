@@ -1,12 +1,13 @@
 """ test module for sprintf """
 from datetime import datetime, timezone
+
 # import re
 
 from pathlib import Path
 
 from fastapi.testclient import TestClient
 import pytest
-from sprintf import app, DEFAULT_FORMATSTRING
+from sprintf import app
 
 client = TestClient(app)
 
@@ -26,9 +27,7 @@ def test_index_html():
         pytest.fail(
             "Couldn't find index.html on the filesystem, can't test for it in the API"
         )
-    expected_result = indexhtml.read_text(encoding="utf8").replace(
-        "###QUERYSTRING###", DEFAULT_FORMATSTRING
-    )
+    expected_result = indexhtml.read_text(encoding="utf8")
     response = client.get("/")
     assert response.text == expected_result
 
@@ -46,21 +45,24 @@ def test_input_epochtime():
 
     response = client.post(
         url="/parse",
-        json = {
-            "formatstring" : "%Y-%m-%d %H:%m:%S",
-            "epochtime" : "0",
-        })
+        json={
+            "formatstring": "%Y-%m-%d %H:%m:%S",
+            "epochtime": "0",
+        },
+    )
 
-    assert response.json() == {'result': '1970-01-01 00:01:00'}
+    assert response.json() == {"result": "1970-01-01 00:01:00"}
 
     response = client.post(
         url="/parse",
-        json = {
-            "formatstring" : "%Y-%m-%d %H:%m:%S",
-            "epochtime" : "10",
-        })
+        json={
+            "formatstring": "%Y-%m-%d %H:%m:%S",
+            "epochtime": "10",
+        },
+    )
 
-    assert response.json() == {'result': '1970-01-01 00:01:10'}
+    assert response.json() == {"result": "1970-01-01 00:01:10"}
+
 
 # TODO: finish this for #2
 # # def test_parse_n():
@@ -78,18 +80,14 @@ def test_input_epochtime():
 
 #     assert response.json() == { "result" : expected_result }
 
-# TODO: finish this for #3
-# def test_parse_q():
-#     """ tests the %Q functionality """
 
+def test_parse_q_live():
+    """ tests the %Q functionality, actually running through fastAPI """
+    epochtime = 0.001
+    expected_result = "1970-01-01 00:00:00.001"
+    response = client.post(
+        url="/parse",
+        json={"formatstring": "%Y-%m-%d %H:%M:%S.%Q", "epochtime": epochtime},
+    )
 
-#     epochtime = 0.0001
-
-#     # regex_match = re.compile("")
-#     expected_result = "1970-01-01 10:00:00.0001"
-#     response = client.post(url="/parse", json = {
-#         "formatstring" : "%Y-%m-%d %H:%m:%S.%Q" ,
-#         "epochtime" : epochtime
-#     })
-
-#     assert response.json() == { "result" : expected_result }
+    assert response.json() == {"result": expected_result}

@@ -1,9 +1,13 @@
 """ sprintf as a service """
 
+from ast import Pass
+from calendar import formatstring
 from datetime import datetime, timezone
 import json
 import os.path
 from pathlib import Path
+import re
+import sys
 from typing import Dict, Optional, Union
 
 from fastapi import FastAPI
@@ -12,7 +16,6 @@ from fastapi.responses import FileResponse, HTMLResponse
 
 from pydantic import BaseModel
 
-DEFAULT_FORMATSTRING = "%Y-%m-%d"
 IMAGES_BASEDIR = f"{os.path.dirname(__file__)}/images/"
 JS_BASEDIR = f"{os.path.dirname(__file__)}/js/"
 
@@ -39,16 +42,56 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+match_q = re.compile(r"(?P<matchq>%(?P<num>\d*)Q)")
+
+class PassableUserQuery(BaseModel):
+    """ pass this around """
+    formatstring: str
+    date_object: datetime
+
+def parse_q_formatstring(query: PassableUserQuery) -> PassableUserQuery:
+    """ parses the userquery for a formatstring """
+    for found in match_q.finditer(query.formatstring):
+        matchdict = found.groupdict()
+        # default of 3
+        if not matchdict["num"]:
+            matchdict["num"] = "3"
+        matchdict_num = int(matchdict["num"])
+        if query.date_object.microsecond:
+            microsecond = str(query.date_object.microsecond).rjust(6,'0')
+            microsecond = microsecond[:matchdict_num]
+            # if for some reason the system doesn't have
+            # that much resolution, zero pad the right hand side.
+            microsecond = microsecond.ljust(matchdict_num,"0")
+        else:
+            microsecond = "0" * matchdict_num
+        query.formatstring = query.formatstring.replace(matchdict['matchq'], microsecond)
+    return query
+
+def parse_formatstring(query: UserQuery) -> str:
+    """ parse the request """
+
+    if query.epochtime is not None:
+        date_object = datetime.fromtimestamp(query.epochtime, tz=timezone.utc)
+    else:
+        date_object = datetime.now(tz=timezone.utc)
+
+    passableobject = PassableUserQuery(
+        formatstring=query.formatstring,
+        date_object=date_object
+    )
+
+    passableobject = parse_q_formatstring(passableobject)
+    print(passableobject)
+    return passableobject.date_object.strftime(passableobject.formatstring)
+
 @app.post("/parse")
 async def parse(query: UserQuery) -> Result:
     """ parse a request then responds """
     print(query.json())
-    if query.epochtime is not None:
-        # print("using epochtime")
-        date_object = datetime.fromtimestamp(query.epochtime, tz=timezone.utc)
-    else:
-        date_object = datetime.now(tz=timezone.utc)
-    result=date_object.strftime(query.formatstring)
+
+    result = parse_formatstring(query)
+
     print(f"result: '{result}'")
     return Result( result=result )
 
@@ -96,7 +139,7 @@ async def healthcheck() -> HTMLResponse:
     return HTMLResponse("OK")
 
 @app.get("/")
-async def root(f: Optional[str] = None) -> HTMLResponse: # pylint: disable=invalid-name
+async def root() -> HTMLResponse: # pylint: disable=invalid-name
     """ homepage """
     indexfile = Path(f"{os.path.dirname(__file__)}/index.html")
     if not indexfile.exists():
@@ -104,8 +147,4 @@ async def root(f: Optional[str] = None) -> HTMLResponse: # pylint: disable=inval
         return HTMLResponse(content="File Not Found", status_code=404)
     content = indexfile.read_text(encoding="utf8")
 
-    inputval = "%Y-%m-%d"
-    if f is not None and f.strip() != "":
-        inputval = f.strip()
-    content = content.replace("###QUERYSTRING###",inputval)
     return HTMLResponse(content)

@@ -21,6 +21,7 @@ def fixture_client():
 
     return TestClient(app)
 
+
 async def test_links(client):
     """ testing """
     # asession = AsyncHTMLSession()
@@ -30,17 +31,17 @@ async def test_links(client):
     parsed = HTML(html=result.content)
 
     tags_to_find = {
-        "a" : "href",
-        "link" : "href",
-        "meta" : "content",
-        "script" : "src",
-        "img" : "src",
+        "a": "href",
+        "link": "href",
+        "meta": "content",
+        "script": "src",
+        "img": "src",
     }
 
     links_to_check: List[str] = []
 
-    for tag in tags_to_find: # pylint: disable=consider-using-dict-items
-        elements  : List[Element] = parsed.find(tag)
+    for tag in tags_to_find:  # pylint: disable=consider-using-dict-items
+        elements: List[Element] = parsed.find(tag)
         for element in elements:
             if tags_to_find[tag] in element.attrs:
                 value: str = element.attrs[tags_to_find[tag]]
@@ -54,7 +55,7 @@ async def test_links(client):
         try:
             if link.startswith("http") and "sprintf.yaleman.org" not in link:
                 print(f"Web: {link}")
-                result=requests.get(link)
+                result = requests.get(link)
             else:
                 print(f"Local: {link}")
                 result = client.get(link)
@@ -67,4 +68,4 @@ async def test_links(client):
             else:
                 pytest.fail(httperror)
     if failed_links:
-        pytest.fail("\n".join([ f"404 pulling {link}" for link in failed_links ]))
+        pytest.fail("\n".join([f"404 pulling {link}" for link in failed_links]))

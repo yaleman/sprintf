@@ -13,7 +13,7 @@ def cli(
     port: int=8000,
     host: str="0.0.0.0",
     proxy_headers: bool=False,
-    ):
+    ) -> None:
     """ sprintf server """
     uvicorn.run(
         app="sprintf:app",
