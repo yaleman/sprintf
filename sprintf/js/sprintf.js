@@ -8,7 +8,7 @@ var sprintf = new Vue({
     },
     created () {
         let qp = new URLSearchParams(window.location.search);
-        if (qp.get("f") != "" ) {
+        if (qp.get("f") != "" && qp.get("f") != null ) {
             this.formatstring = qp.get("f");
         }
         this.getParsed();
