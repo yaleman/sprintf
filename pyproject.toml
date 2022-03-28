@@ -17,7 +17,7 @@ click = "^8.0.4"
 
 [tool.poetry.dev-dependencies]
 pylint = "^2.12.2"
-mypy = "^0.931"
+mypy = "^0.942"
 pytest = "^6.2.5"
 black = "^22.1"
 pylint-pydantic = "^0.1.4"
