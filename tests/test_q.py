@@ -2,8 +2,7 @@
 
 from sprintf import match_q, parse_formatstring, UserQuery
 
-
-def test_noq():
+def test_noq() -> None:
     """ tests a string without %Q in it """
     input_data = UserQuery.parse_obj(
         {
@@ -14,7 +13,7 @@ def test_noq():
     assert parse_formatstring(input_data) == "1970-01-01"
 
 
-def test_bareq():
+def test_bareq() -> None:
     """ test a bare %Q """
     input_data = UserQuery.parse_obj(
         {
@@ -26,7 +25,7 @@ def test_bareq():
     assert parse_formatstring(input_data) == expected_string
 
 
-def test_q4():
+def test_q4() -> None:
     """ test a  %4Q """
     input_data = UserQuery.parse_obj(
         {
@@ -38,7 +37,7 @@ def test_q4():
     assert parse_formatstring(input_data) == expected_string
 
 
-def test_q6_double():
+def test_q6_double() -> None:
     """ test a  %6Q """
     input_data = UserQuery.parse_obj(
         {
@@ -50,7 +49,7 @@ def test_q6_double():
     assert parse_formatstring(input_data) == expected_string
 
 
-def test_q3():
+def test_q3() -> None:
     """ test a  %3Q """
     input_data = UserQuery.parse_obj(
         {
@@ -63,11 +62,15 @@ def test_q3():
 
 
 ### test the thing what finds the format string
-def test_matchq():
+def test_matchq() -> None:
     """ test some things """
-    assert match_q.search("%Q").groupdict() == {"num": "", "matchq": "%Q"}
+    search_match = match_q.search("%3Q")
+    assert search_match is not None
+    assert search_match.groupdict() == {"num": "", "matchq": "%Q"}
 
 
-def test_matchq3():
+def test_matchq3() -> None:
     """ test %3Q things """
-    assert match_q.search("%3Q").groupdict() == {"num": "3", "matchq": "%3Q"}
+    search_match = match_q.search("%3Q")
+    assert search_match is not None
+    assert search_match.groupdict() == {"num": "3", "matchq": "%3Q"}

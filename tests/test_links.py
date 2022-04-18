@@ -7,7 +7,8 @@ from fastapi.testclient import TestClient
 import pytest
 import requests
 import requests.exceptions
-from requests_html import HTML, Element
+
+from requests_html import HTML, Element # type: ignore
 
 from sprintf import app
 
@@ -16,13 +17,13 @@ pytestmark = pytest.mark.asyncio
 
 
 @pytest.fixture(name="client")
-def fixture_client():
+def fixture_client() -> TestClient:
     """ client factory """
 
     return TestClient(app)
 
 
-async def test_links(client):
+async def test_links(client: TestClient) -> None:
     """ testing """
     # asession = AsyncHTMLSession()
     # r = await asession.get('https://stackoverflow.org/')
@@ -66,6 +67,6 @@ async def test_links(client):
             if result.status_code == 404:
                 failed_links.append(link)
             else:
-                pytest.fail(httperror)
+                pytest.fail(str(httperror))
     if failed_links:
         pytest.fail("\n".join([f"404 pulling {link}" for link in failed_links]))

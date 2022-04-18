@@ -12,14 +12,14 @@ from sprintf import app
 client = TestClient(app)
 
 
-def test_read_main():
+def test_read_main() -> None:
     """ test the healthcheck works """
     response = client.get("/up")
     assert response.status_code == 200
     assert response.text == "OK"
 
 
-def test_index_html():
+def test_index_html() -> None:
     """ gets the index.html"""
     indexhtml = Path("./sprintf/index.html")
 
@@ -32,7 +32,7 @@ def test_index_html():
     assert response.text == expected_result
 
 
-def test_parse():
+def test_parse() -> None:
     """ gets a date """
 
     expected_result = datetime.now(tz=timezone.utc).strftime("%Y-%m")
@@ -40,7 +40,7 @@ def test_parse():
     assert response.json() == {"result": expected_result}
 
 
-def test_input_epochtime():
+def test_input_epochtime() -> None:
     """ tests that inputs work """
 
     response = client.post(
@@ -64,7 +64,7 @@ def test_input_epochtime():
     assert response.json() == {"result": "1970-01-01 00:01:10"}
 
 
-def test_parse_n():
+def test_parse_n() -> None:
     """ tests the %N functionality """
 
     epochtime = 0.0001
@@ -79,7 +79,7 @@ def test_parse_n():
     assert response.json() == { "result" : expected_result }
 
 
-def test_parse_q_live():
+def test_parse_q_live() -> None:
     """ tests the %Q functionality, actually running through fastAPI """
     epochtime = 0.001
     expected_result = "1970-01-01 00:00:00.001"
