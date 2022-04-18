@@ -64,7 +64,7 @@ def test_q3() -> None:
 ### test the thing what finds the format string
 def test_matchq() -> None:
     """ test some things """
-    search_match = match_q.search("%3Q")
+    search_match = match_q.search("%Q")
     assert search_match is not None
     assert search_match.groupdict() == {"num": "", "matchq": "%Q"}
 
