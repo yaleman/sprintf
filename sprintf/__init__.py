@@ -7,8 +7,10 @@ import json
 import os.path
 from pathlib import Path
 import re
-import sys
 from typing import Dict, Optional, Union
+
+import click
+import uvicorn # type: ignore
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -150,3 +152,23 @@ async def root() -> HTMLResponse: # pylint: disable=invalid-name
     content = indexfile.read_text(encoding="utf8")
 
     return HTMLResponse(content)
+
+@click.command()
+@click.option("--reload", is_flag=True)
+@click.option("--port", type=int, default=8000)
+@click.option("--host", type=str, default="0.0.0.0")
+@click.option("--proxy-headers", is_flag=True)
+def cli(
+    reload: bool=False,
+    port: int=8000,
+    host: str="0.0.0.0",
+    proxy_headers: bool=False,
+    ) -> None:
+    """ sprintf server """
+    uvicorn.run(
+        app="sprintf:app",
+        reload=reload,
+        host=host,
+        port=port,
+        proxy_headers=proxy_headers,
+        )
