@@ -43,3 +43,7 @@ authors = [
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+[tool.pylint.DEFAULT]
+extension-pkg-whitelist="pydantic"
+load-plugins="pylint_pydantic"
+
