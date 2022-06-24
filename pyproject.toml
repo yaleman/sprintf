@@ -24,7 +24,7 @@ pylint-pydantic = "^0.1.4"
 requests = "^2.28.0"
 requests-html = "^0.10.0"
 pytest-asyncio = "^0.18.0"
-types-requests = "^2.27.30"
+types-requests = "^2.27.31"
 
 [build-system]
 requires = [
