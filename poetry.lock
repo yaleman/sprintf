@@ -173,7 +173,7 @@ python-versions = "*"
 
 [[package]]
 name = "fastapi"
-version = "0.79.0"
+version = "0.79.1"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 category = "main"
 optional = false
@@ -335,8 +335,8 @@ optional = false
 python-versions = ">=3.7"
 
 [package.extras]
-test = ["pytest-mock (>=3.6)", "pytest-cov (>=2.7)", "pytest (>=6)", "appdirs (==1.4.4)"]
-docs = ["sphinx-autodoc-typehints (>=1.12)", "proselint (>=0.10.2)", "furo (>=2021.7.5b38)", "Sphinx (>=4)"]
+docs = ["Sphinx (>=4)", "furo (>=2021.7.5b38)", "proselint (>=0.10.2)", "sphinx-autodoc-typehints (>=1.12)"]
+test = ["appdirs (==1.4.4)", "pytest (>=6)", "pytest-cov (>=2.7)", "pytest-mock (>=3.6)"]
 
 [[package]]
 name = "pluggy"
@@ -705,7 +705,7 @@ docs = ["rst.linker (>=1.9)", "jaraco.packaging (>=8.2)", "sphinx"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "dae93111b2daab493887f59be12cd0f5fbd9e2ae25f59026b0879458cd27a992"
+content-hash = "a248b7a59adba13266f0d04f312ebc024c2d1aa33ee1e769fd77182a15ef818b"
 
 [metadata.files]
 anyio = [
@@ -788,8 +788,8 @@ fake-useragent = [
     {file = "fake-useragent-0.1.11.tar.gz", hash = "sha256:c104998b750eb097eefc28ae28e92d66397598d2cf41a31aa45d5559ef1adf35"},
 ]
 fastapi = [
-    {file = "fastapi-0.79.0-py3-none-any.whl", hash = "sha256:d337563424ceada23857f73d5abe8dae0c28e4cccb53b2af06e78b7bb4a1c7d7"},
-    {file = "fastapi-0.79.0.tar.gz", hash = "sha256:cf0ff6db25b91d321050c4112baab0908c90f19b40bf257f9591d2f9780d1f22"},
+    {file = "fastapi-0.79.1-py3-none-any.whl", hash = "sha256:3c584179c64e265749e88221c860520fc512ea37e253282dab378cc503dfd7fd"},
+    {file = "fastapi-0.79.1.tar.gz", hash = "sha256:006862dec0f0f5683ac21fb0864af2ff12a931e7ba18920f28cc8eceed51896b"},
 ]
 h11 = [
     {file = "h11-0.13.0-py3-none-any.whl", hash = "sha256:8ddd78563b633ca55346c8cd41ec0af27d3c79931828beffb46ce70a379e7442"},
