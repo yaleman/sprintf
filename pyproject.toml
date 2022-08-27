@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sprintf"
-version = "0.0.1"
+version = "0.0.2"
 description = "SPA for sprintf python things"
 authors = [
     "James Hodgkinson <james@terminaloutcomes.com>",

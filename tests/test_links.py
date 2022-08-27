@@ -27,7 +27,7 @@ async def test_links(client: TestClient) -> None:
     """ testing """
     # asession = AsyncHTMLSession()
     # r = await asession.get('https://stackoverflow.org/')
-    result = client.get("/")
+    result = client.get("/", timeout=5)
 
     parsed = HTML(html=result.content)
 
@@ -56,7 +56,7 @@ async def test_links(client: TestClient) -> None:
         try:
             if link.startswith("http") and "sprintf.yaleman.org" not in link:
                 print(f"Web: {link}")
-                result = requests.get(link)
+                result = requests.get(link, timeout=5)
             else:
                 print(f"Local: {link}")
                 result = client.get(link)
