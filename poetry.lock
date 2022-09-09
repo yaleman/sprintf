@@ -168,7 +168,7 @@ python-versions = "*"
 
 [[package]]
 name = "fastapi"
-version = "0.81.0"
+version = "0.82.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 category = "main"
 optional = false
@@ -697,7 +697,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "bc3ea60134f8512d0d53d34ef5cd2a5b01c4096a56fccc7793b6aa8dadcd79f5"
+content-hash = "90a9df0426e358cdf9100ec8aaf4c1657216870a72ee8fa4a1d137b1fa807ec8"
 
 [metadata.files]
 anyio = [
@@ -776,8 +776,8 @@ fake-useragent = [
     {file = "fake-useragent-0.1.11.tar.gz", hash = "sha256:c104998b750eb097eefc28ae28e92d66397598d2cf41a31aa45d5559ef1adf35"},
 ]
 fastapi = [
-    {file = "fastapi-0.81.0-py3-none-any.whl", hash = "sha256:9ac5f5d252b4b394df29accb1ed4bedf30e0e87fc6eb7ec75e1449fa040bfc17"},
-    {file = "fastapi-0.81.0.tar.gz", hash = "sha256:9dafdc41feda85ee5acf0f7dd6bcb7fd946318a6664b41fd33e33b26f666a346"},
+    {file = "fastapi-0.82.0-py3-none-any.whl", hash = "sha256:a4269329a7374c78f6e92c195d14cc4ce3a525e25b79e62edf2df8196469743f"},
+    {file = "fastapi-0.82.0.tar.gz", hash = "sha256:5ee7b7473a55940a18d4869ff57d29c372363bf8d3033a0e660a8cf38b1d3d9e"},
 ]
 h11 = [
     {file = "h11-0.13.0-py3-none-any.whl", hash = "sha256:8ddd78563b633ca55346c8cd41ec0af27d3c79931828beffb46ce70a379e7442"},
