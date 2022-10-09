@@ -11,12 +11,9 @@ RUN useradd sprintf
 # RUN apk add --no-cache curl
 # RUN addgroup -S appgroup && adduser -S sprintf -G appgroup
 
-
-
 RUN apt-get update
 RUN apt-get install -y curl
 RUN apt-get clean
-
 
 RUN mkdir -p /home/sprintf/
 RUN chown sprintf /home/sprintf -R
@@ -29,8 +26,6 @@ COPY sprintf sprintf
 COPY poetry.lock .
 COPY pyproject.toml .
 
-# RUN python -m pip install poetry
-
 RUN chown sprintf /build -R
 WORKDIR /build/
 USER sprintf
@@ -38,6 +33,12 @@ USER sprintf
 RUN python -m pip install --upgrade --no-warn-script-location pip
 RUN python -m pip install --no-warn-script-location /build
 
+# clean up after ourselves
+USER root
+WORKDIR /
+RUN rm -rf /build/
+
+USER sprintf
 # to allow xff headers from docker IPs
 ENV FORWARDED_ALLOW_IPS="*"
 
