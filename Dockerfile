@@ -23,7 +23,6 @@ RUN mkdir -p build/sprintf
 WORKDIR /build
 
 COPY sprintf sprintf
-COPY poetry.lock .
 COPY pyproject.toml .
 
 RUN chown sprintf /build -R
