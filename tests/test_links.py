@@ -59,7 +59,7 @@ async def test_links(client: TestClient) -> None:
                 testresult = requests.get(link, timeout=5)
             else:
                 print(f"Local: {link}")
-                testresult = client.get(link)
+                testresult = client.get(link) #type: ignore
             testresult.raise_for_status()
             assert testresult
             print(f"OK: {link} ")
