@@ -56,15 +56,15 @@ async def test_links(client: TestClient) -> None:
         try:
             if link.startswith("http") and "sprintf.yaleman.org" not in link:
                 print(f"Web: {link}")
-                result = requests.get(link, timeout=5)
+                testresult = requests.get(link, timeout=5)
             else:
                 print(f"Local: {link}")
-                result = client.get(link)
-            result.raise_for_status()
-            assert result
+                testresult = client.get(link)
+            testresult.raise_for_status()
+            assert testresult
             print(f"OK: {link} ")
         except requests.exceptions.HTTPError as httperror:
-            if result.status_code == 404:
+            if testresult.status_code == 404:
                 failed_links.append(link)
             else:
                 pytest.fail(str(httperror))
