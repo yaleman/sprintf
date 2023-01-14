@@ -99,7 +99,7 @@ async def parse(query: UserQuery) -> Result:
 
     return Result( result=result )
 
-@app.get("/js/{filename}")
+@app.get("/js/{filename}", response_model=None)
 async def jsfile(filename: str) -> Union[FileResponse, HTMLResponse]:
     """ return a js file """
     filepath = Path(f"{os.path.dirname(__file__)}/js/{filename}").resolve()
@@ -116,7 +116,7 @@ async def jsfile(filename: str) -> Union[FileResponse, HTMLResponse]:
         return HTMLResponse(status_code=403)
     return FileResponse(filepath.as_posix())
 
-@app.get("/images/{filename}")
+@app.get("/images/{filename}", response_model=None)
 async def images_get(filename: str) -> Union[FileResponse, HTMLResponse]:
     """ return the filename file """
     filepath = Path(f"{os.path.dirname(__file__)}/images/{filename}").resolve()
@@ -131,18 +131,18 @@ async def images_get(filename: str) -> Union[FileResponse, HTMLResponse]:
         return HTMLResponse(status_code=403)
     return FileResponse(filepath.as_posix())
 
-@app.get("/robots.txt")
+@app.get("/robots.txt", response_model=None)
 async def robotstxt() -> HTMLResponse:
     """ robots.txt file """
     return HTMLResponse("""User-agent: *
 """)
 
-@app.get("/up")
+@app.get("/up", response_model=None)
 async def healthcheck() -> HTMLResponse:
     """ healthcheck endpoint """
     return HTMLResponse("OK")
 
-@app.get("/")
+@app.get("/", response_model=None)
 async def root() -> HTMLResponse: # pylint: disable=invalid-name
     """ homepage """
     indexfile = Path(f"{os.path.dirname(__file__)}/index.html")
