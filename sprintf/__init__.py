@@ -24,7 +24,7 @@ JS_BASEDIR = f"{os.path.dirname(__file__)}/js/"
 class UserQuery(BaseModel):
     """ Query from a user """
     formatstring: str
-    epochtime: Optional[float] # Seconds since UNIX epoch
+    epochtime: Optional[float] = None # Seconds since UNIX epoch
 
 class Result(BaseModel):
     """ Result """
