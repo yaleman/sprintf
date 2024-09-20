@@ -9,7 +9,7 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-fastapi = "^0.114.1"
+fastapi = "^0.115.0"
 pydantic = "^2.0.3"
 python-multipart = "^0.0.9"
 uvicorn = "^0.30.0"
