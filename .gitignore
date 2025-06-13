@@ -5,4 +5,3 @@ config.py
 *.egg-info/
 dist/
 build/
-poetry.lock

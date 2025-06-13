@@ -1,15 +1,9 @@
-FROM python:3.10-slim
-# FROM python:3.10-alpine
+FROM python:3.13-slim
 
 ########################################
 # add a user so we're not running as root
 ########################################
-# ubuntu mode
 RUN useradd sprintf
-
-# alpine mode
-# RUN apk add --no-cache curl
-# RUN addgroup -S appgroup && adduser -S sprintf -G appgroup
 
 RUN apt-get update
 RUN apt-get install -y curl
@@ -25,12 +19,15 @@ WORKDIR /build
 COPY sprintf sprintf
 COPY pyproject.toml .
 
-RUN chown sprintf /build -R
+RUN chown sprintf:sprintf /build -R
+RUN chown sprintf:sprintf /home/sprintf -R
 WORKDIR /build/
+
+
 USER sprintf
 
-RUN python -m pip install --upgrade --no-warn-script-location pip
-RUN python -m pip install --no-warn-script-location /build
+RUN python -m pip install --user --upgrade pip /build
+
 
 # clean up after ourselves
 USER root
@@ -40,5 +37,7 @@ RUN rm -rf /build/
 USER sprintf
 # to allow xff headers from docker IPs
 ENV FORWARDED_ALLOW_IPS="*"
-
-CMD python -m sprintf --host 0.0.0.0 --port 8000 --proxy-headers
+# tell people where we're running the thing
+EXPOSE 8000
+ENV PATH="/home/sprintf/.local/bin"
+CMD [ "sprintf", "--host", "0.0.0.0", "--port", "8000", "--proxy-headers"]

@@ -1,6 +1,6 @@
 """ CLI version """
 
-from . import cli
+from sprintf import cli
 
 if __name__ == '__main__':
     cli()

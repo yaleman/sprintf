@@ -27,7 +27,7 @@ async def test_links(client: TestClient) -> None:
     """ testing """
     # asession = AsyncHTMLSession()
     # r = await asession.get('https://stackoverflow.org/')
-    result = client.get("/", timeout=5)
+    result = client.get("/" )
 
     parsed = HTML(html=result.content)
 

@@ -1,16 +1,15 @@
 """ sprintf as a service """
 
-from ast import Pass
-from calendar import formatstring
 from datetime import datetime, timezone
 import json
+import logging
 import os.path
 from pathlib import Path
 import re
-from typing import Dict, Optional, Union
+from typing import  Optional, Union
 
 import click
-import uvicorn # type: ignore
+import uvicorn
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,6 +19,15 @@ from pydantic import BaseModel
 
 IMAGES_BASEDIR = f"{os.path.dirname(__file__)}/images/"
 JS_BASEDIR = f"{os.path.dirname(__file__)}/js/"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+# Create a logger instance
+logger = logging.getLogger(__name__)
 
 class UserQuery(BaseModel):
     """ Query from a user """
@@ -91,7 +99,7 @@ async def parse(query: UserQuery) -> Result:
     """ parse a request then responds """
     result = parse_formatstring(query)
 
-    print(json.dumps({
+    (json.dumps({
         "formatstring" : query.formatstring,
         "epochtime" : query.epochtime,
         "result": result,
@@ -104,11 +112,11 @@ async def jsfile(filename: str) -> Union[FileResponse, HTMLResponse]:
     """ return a js file """
     filepath = Path(f"{os.path.dirname(__file__)}/js/{filename}").resolve()
     if not filepath.exists() or not filepath.is_file():
-        print(f"Can't find {filepath.as_posix()}")
+        logger.error(f"Can't find {filepath.as_posix()}")
         return HTMLResponse(status_code=404)
 
-    if not JS_BASEDIR in filepath.as_posix():
-        print(json.dumps({
+    if JS_BASEDIR not in filepath.as_posix():
+        logger.warning(json.dumps({
             "action" : "attempt_outside_images_dir",
             "original_path" : filename,
             "resolved_path" : filepath.as_posix()
@@ -122,8 +130,8 @@ async def images_get(filename: str) -> Union[FileResponse, HTMLResponse]:
     filepath = Path(f"{os.path.dirname(__file__)}/images/{filename}").resolve()
     if not filepath.resolve().is_file() or not filepath.exists():
         return HTMLResponse(status_code=404)
-    if not IMAGES_BASEDIR in filepath.resolve().as_posix():
-        print(json.dumps({
+    if IMAGES_BASEDIR not in filepath.resolve().as_posix():
+        logger.warning(json.dumps({
             "action" : "attempt_outside_images_dir",
             "original_path" : filename,
             "resolved_path" : filepath.resolve()
@@ -147,7 +155,7 @@ async def root() -> HTMLResponse: # pylint: disable=invalid-name
     """ homepage """
     indexfile = Path(f"{os.path.dirname(__file__)}/index.html")
     if not indexfile.exists():
-        print("Couldn't find index file!")
+        logger.error("Couldn't find index file!")
         return HTMLResponse(content="File Not Found", status_code=404)
     content = indexfile.read_text(encoding="utf8")
 
