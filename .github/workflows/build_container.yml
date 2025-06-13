@@ -6,6 +6,9 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read # to download the repository
+      packages: write # to upload the container image
     steps:
       - name: Checkout
         uses: actions/checkout@v4
