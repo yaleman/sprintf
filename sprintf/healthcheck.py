@@ -5,7 +5,7 @@ import click
 @click.command()
 @click.option("--host", default="localhost", help="Host to query the server on")
 @click.option("--port", default=8000, help="Port to query the server on")
-def main(host, port):
+def main(host: str, port: int) -> None:
     url = f"http://{host}:{port}/up"
     try:
         resp = requests.get(url, timeout=1)
