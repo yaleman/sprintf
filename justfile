@@ -10,6 +10,6 @@ run_docker: docker
         ghcr.io/yaleman/sprintf:latest
 
 check:
-    uv run ruff check tests sprintf
+    uv run ty check
+    uv run ruff check
     uv run pytest
-    uv run mypy --strict sprintf tests

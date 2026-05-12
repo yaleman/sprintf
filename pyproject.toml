@@ -32,7 +32,6 @@ asyncio_mode = "auto"
 
 [dependency-groups]
 dev = [
-    "mypy>=1.0,<3.0",
     "pytest>=9.0.3,<10.0.0",
     "requests-html>=0.10.0",
     "pytest-asyncio>=0.26.0",
@@ -41,4 +40,5 @@ dev = [
     "lxml-html-clean>=0.4.2",
     "isort>=6.0.1",
     "httpx>=0.28.1",
+    "ty>=0.0.35",
 ]

@@ -1,5 +1,4 @@
-""" fastapi / requests-html tests that check that all the links/references on the page work... """
-
+"""fastapi / requests-html tests that check that all the links/references on the page work..."""
 
 from typing import List
 
@@ -8,7 +7,7 @@ import pytest
 import requests
 import requests.exceptions
 
-from requests_html import HTML, Element # type: ignore
+from requests_html import HTML, Element
 
 from sprintf import app
 
@@ -18,16 +17,16 @@ pytestmark = pytest.mark.asyncio
 
 @pytest.fixture(name="client")
 def fixture_client() -> TestClient:
-    """ client factory """
+    """client factory"""
 
     return TestClient(app)
 
 
 async def test_links(client: TestClient) -> None:
-    """ testing """
+    """testing"""
     # asession = AsyncHTMLSession()
     # r = await asession.get('https://stackoverflow.org/')
-    result = client.get("/" )
+    result = client.get("/")
 
     parsed = HTML(html=result.content)
 
@@ -42,7 +41,9 @@ async def test_links(client: TestClient) -> None:
     links_to_check: List[str] = []
 
     for tag in tags_to_find:  # pylint: disable=consider-using-dict-items
-        elements: List[Element] = parsed.find(tag)
+        elements: List[Element] | Element = parsed.find(tag)
+        if isinstance(elements, Element):
+            elements = [elements]
         for element in elements:
             if tags_to_find[tag] in element.attrs:
                 value: str = element.attrs[tags_to_find[tag]]
@@ -59,7 +60,7 @@ async def test_links(client: TestClient) -> None:
                 testresult = requests.get(link, timeout=5)
             else:
                 print(f"Local: {link}")
-                testresult = client.get(link) #type: ignore
+                testresult = client.get(link)
             testresult.raise_for_status()
             assert testresult
             print(f"OK: {link} ")
