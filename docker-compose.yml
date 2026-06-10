@@ -24,5 +24,5 @@ services:
     healthcheck:
       test: ["CMD", "sprintf-healthcheck"]
       interval: 60s
-      timeout: 2s
+      timeout: 5s
       retries: 5
