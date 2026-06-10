@@ -36,3 +36,17 @@ jobs:
         - registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+  done:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: pushover-actions
+        uses: umahmood/pushover-actions@main
+        env:
+          PUSHOVER_TOKEN: ${{ secrets.PUSHOVER_TOKEN }}
+          PUSHOVER_USER: ${{ secrets.PUSHOVER_USER }}
+        with:
+          status: "${{ needs.build.result }}"
+          title: "Github Actions Result"
+          message: "Container build finished!"
+        if: ${{ always() }}
